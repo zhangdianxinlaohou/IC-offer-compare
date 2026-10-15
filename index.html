@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的主页 · 小工具</title>
+<style>
+:root{
+  --bg:#f4f7fb; --bg2:#e8eef8; --card:#ffffff;
+  --text:#1b2432; --muted:#697792; --accent:#2f6df6;
+  --line:rgba(27,36,50,.08); --shadow:0 10px 28px rgba(30,52,92,.09);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0e131e; --bg2:#161d2c; --card:#1a2233;
+    --text:#e9eef8; --muted:#94a2ba; --accent:#5b8dff;
+    --line:rgba(255,255,255,.08); --shadow:0 10px 28px rgba(0,0,0,.38);
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; color:var(--text);
+  font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(165deg,var(--bg),var(--bg2));
+  padding:calc(56px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto}
+
+/* ---------- 顶部：改成你自己的信息 ---------- */
+.hero{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+.avatar{
+  flex:none;width:64px;height:64px;border-radius:50%;
+  display:grid;place-items:center;font-size:30px;
+  background:linear-gradient(140deg,var(--accent),#7aa7ff);
+  box-shadow:var(--shadow);
+}
+.hero h1{margin:0;font-size:26px;letter-spacing:.5px}
+.hero p{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+
+/* ---------- 工具卡片 ---------- */
+.section{color:var(--muted);font-size:13px;letter-spacing:2px;margin:0 0 12px 2px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{
+  display:block;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:20px 20px 18px;box-shadow:var(--shadow);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.card .icon{font-size:26px;line-height:1}
+.card h2{margin:10px 0 4px;font-size:17.5px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .go{margin-top:14px;font-size:14px;color:var(--accent);font-weight:600}
+.card .tag{
+  display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
+  font-size:11.5px;font-weight:600;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  vertical-align:2px;
+}
+
+.note{
+  margin-top:28px;padding:14px 16px;border-radius:12px;
+  background:color-mix(in srgb,var(--accent) 7%,transparent);
+  border:1px dashed color-mix(in srgb,var(--accent) 30%,transparent);
+  color:var(--muted);font-size:13.5px;
+}
+.note b{color:var(--text);font-weight:600}
+
+footer{margin-top:34px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <!-- 头像：把 🧮 换成你喜欢的 emoji，或者换成 <img src="头像.jpg" alt=""> -->
+    <div class="avatar">🧮</div>
+    <div>
+      <!-- ↓↓↓ 改成你自己的名字和一句话介绍 ↓↓↓ -->
+      <h1>你的名字</h1>
+      <p>随手做的小工具，欢迎试用 · 全部免费</p>
+    </div>
+  </header>
+
+  <p class="section">工具箱</p>
+  <div class="grid">
+
+    <a class="card" href="salary.html">
+      <div class="icon">💰</div>
+      <h2>工资 · 个税 · 时薪 计算器<span class="tag">半导体行业</span></h2>
+      <p>填月薪和城市，算出社保、个税、每月到手和真实时薪；还能一键对比 100+ 条真实 Offer（设计 / 制造 / 设备 / EDA…）。</p>
+      <div class="go">打开 →</div>
+    </a>
+
+    <!-- 以后想加新工具：把新页面（比如 xxx.html）一起上传，然后复制上面这一整段 <a class="card">…</a> 改一下就行 -->
+
+  </div>
+
+  <div class="note">
+    <b>关于你的数据：</b>所有输入和对比结果都只存在<strong>你自己的浏览器</strong>里，不会上传到任何服务器，别人也看不到。换电脑或清理浏览器数据会清空（页面上可以「导出数据」备份）。
+  </div>
+
+  <footer>© <span id="year"></span> 你的名字 · 用 GitHub Pages 免费托管</footer>
+</div>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
