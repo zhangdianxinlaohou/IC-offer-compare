@@ -1,109 +1,1186 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>我的主页 · 小工具</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IC Offer Compare</title>
 <style>
-:root{
-  --bg:#f4f7fb; --bg2:#e8eef8; --card:#ffffff;
-  --text:#1b2432; --muted:#697792; --accent:#2f6df6;
-  --line:rgba(27,36,50,.08); --shadow:0 10px 28px rgba(30,52,92,.09);
-}
-@media (prefers-color-scheme: dark){
   :root{
-    --bg:#0e131e; --bg2:#161d2c; --card:#1a2233;
-    --text:#e9eef8; --muted:#94a2ba; --accent:#5b8dff;
-    --line:rgba(255,255,255,.08); --shadow:0 10px 28px rgba(0,0,0,.38);
+    --panel:#ffffff; --ink:#0f172a; --muted:#64748b;
+    --line:#e2e8f0; --line2:#eef2f7;
+    --brand:#4f46e5; --ok:#059669; --bad:#dc2626;
+    --soft:#f8fafc; --soft2:#f1f5f9;
+    --radius:14px; --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
   }
-}
-*{box-sizing:border-box}
-body{
-  margin:0; min-height:100vh; color:var(--text);
-  font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:linear-gradient(165deg,var(--bg),var(--bg2));
-  padding:calc(56px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:760px;margin:0 auto}
-
-/* ---------- 顶部：改成你自己的信息 ---------- */
-.hero{display:flex;align-items:center;gap:16px;margin-bottom:34px}
-.avatar{
-  flex:none;width:64px;height:64px;border-radius:50%;
-  display:grid;place-items:center;font-size:30px;
-  background:linear-gradient(140deg,var(--accent),#7aa7ff);
-  box-shadow:var(--shadow);
-}
-.hero h1{margin:0;font-size:26px;letter-spacing:.5px}
-.hero p{margin:2px 0 0;color:var(--muted);font-size:14.5px}
-
-/* ---------- 工具卡片 ---------- */
-.section{color:var(--muted);font-size:13px;letter-spacing:2px;margin:0 0 12px 2px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.card{
-  display:block;text-decoration:none;color:inherit;
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:20px 20px 18px;box-shadow:var(--shadow);
-  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-}
-.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.card .icon{font-size:26px;line-height:1}
-.card h2{margin:10px 0 4px;font-size:17.5px}
-.card p{margin:0;color:var(--muted);font-size:14px}
-.card .go{margin-top:14px;font-size:14px;color:var(--accent);font-weight:600}
-.card .tag{
-  display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
-  font-size:11.5px;font-weight:600;color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 12%,transparent);
-  vertical-align:2px;
-}
-
-.note{
-  margin-top:28px;padding:14px 16px;border-radius:12px;
-  background:color-mix(in srgb,var(--accent) 7%,transparent);
-  border:1px dashed color-mix(in srgb,var(--accent) 30%,transparent);
-  color:var(--muted);font-size:13.5px;
-}
-.note b{color:var(--text);font-weight:600}
-
-footer{margin-top:34px;text-align:center;color:var(--muted);font-size:13px}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink); background:#eef1f6; font-size:14px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .topbar{
+    background:linear-gradient(120deg,#1e1b4b 0%,#3730a3 45%,#0369a1 100%);
+    color:#fff; padding:18px 26px; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; box-shadow:0 6px 24px rgba(30,27,75,.28);
+  }
+  .brand{display:flex; align-items:center; gap:14px}
+  .logo{
+    width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.16);
+    display:grid;place-items:center;font-size:22px;font-weight:700;border:1px solid rgba(255,255,255,.28)
+  }
+  .topbar h1{margin:0;font-size:18px;letter-spacing:.3px}
+  .topbar p{margin:2px 0 0;font-size:12.5px;opacity:.82}
+  .topbar-actions{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:inherit}
+  .btn{
+    border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.12); color:#fff;
+    padding:9px 14px; border-radius:10px; cursor:pointer; font-size:13px; transition:.15s;
+  }
+  .btn:hover{background:rgba(255,255,255,.22)}
+  .btn.primary{background:#fff;color:#3730a3;border-color:#fff;font-weight:600}
+  .btn.primary:hover{background:#eef2ff}
+  .layout{display:grid; grid-template-columns:minmax(0,1fr) 430px; gap:20px; padding:20px 26px 60px; max-width:1560px; margin:0 auto; align-items:start}
+  @media (max-width:1180px){ .layout{grid-template-columns:1fr} }
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); margin-bottom:18px; overflow:hidden;
+  }
+  .card > h2{
+    margin:0; padding:14px 18px; font-size:14.5px; font-weight:650; letter-spacing:.2px;
+    border-bottom:1px solid var(--line2); display:flex; align-items:center; gap:9px; background:var(--soft);
+  }
+  .card > h2 .idx{
+    width:22px;height:22px;border-radius:7px;background:var(--brand);color:#fff;font-size:12px;
+    display:grid;place-items:center;font-weight:700;flex:none
+  }
+  .card .body{padding:16px 18px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.55}
+  .grid{display:grid;gap:12px 14px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:640px){ .g3,.g4{grid-template-columns:1fr 1fr} .g2{grid-template-columns:1fr} }
+  .field{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .field label{font-size:12.5px;color:#334155;font-weight:560}
+  .field .unit{color:var(--muted);font-weight:400}
+  input,select{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:9px;
+    font-size:14px; font-family:inherit; color:var(--ink); background:#fff; outline:none; transition:.15s;
+  }
+  input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+  input[type=checkbox]{width:auto}
+  .checkline{display:flex;align-items:center;gap:8px;font-size:13px;color:#334155;padding-top:22px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line2);white-space:nowrap}
+  th{color:var(--muted);font-weight:560;font-size:12px;background:var(--soft);position:sticky;top:0}
+  th:first-child,td:first-child{text-align:left}
+  tbody tr:hover{background:#fafbff}
+  td.num{font-variant-numeric:tabular-nums}
+  .rowlist{display:flex;flex-direction:column;gap:9px}
+  .rrow{display:grid;gap:9px;align-items:end;background:var(--soft);padding:10px;border-radius:11px;border:1px solid var(--line2)}
+  .rrow .field label{font-size:11.5px}
+  .rrow input,.rrow select{padding:7px 9px;font-size:13px}
+  .iconbtn{
+    border:1px solid var(--line);background:#fff;color:var(--bad);width:34px;height:34px;border-radius:9px;
+    cursor:pointer;font-size:16px;line-height:1;flex:none
+  }
+  .iconbtn:hover{background:#fef2f2;border-color:#fecaca}
+  .addbtn{
+    border:1px dashed #c7d2fe;background:#eef2ff;color:var(--brand);padding:9px 12px;border-radius:10px;
+    cursor:pointer;font-size:13px;font-weight:600
+  }
+  .addbtn:hover{background:#e0e7ff}
+  .result-panel{position:sticky;top:16px}
+  .big{
+    background:linear-gradient(135deg,#312e81,#4338ca 55%,#0369a1); color:#fff; border-radius:var(--radius);
+    padding:18px; box-shadow:0 14px 34px rgba(49,46,129,.3)
+  }
+  .big .k{font-size:12px;opacity:.82}
+  .big .v{font-size:31px;font-weight:750;letter-spacing:.5px;margin:2px 0 0;font-variant-numeric:tabular-nums}
+  .big .sub{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .big .sub .k{font-size:11.5px}
+  .big .sub .v{font-size:17px;font-weight:650}
+  .stat{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .stat:last-child{border-bottom:none}
+  .stat .lbl{color:#475569;font-size:13px}
+  .stat .val{font-weight:640;font-variant-numeric:tabular-nums}
+  .stat .val.neg{color:var(--bad)}
+  .stat .val.pos{color:var(--ok)}
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:#111827;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;opacity:0;
+    pointer-events:none;transition:.25s;z-index:50;box-shadow:0 12px 30px rgba(0,0,0,.3);max-width:80vw
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .muted{color:var(--muted)}
+  .scroll{max-height:320px;overflow:auto;border:1px solid var(--line2);border-radius:11px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:8px 26px 40px}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:var(--soft2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;color:#334155}
+  .stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  th.del-col{width:78px;text-align:center}
+  td.del-col{text-align:center}
+  .rowdel{border:1px solid #fecaca;background:#fff;color:var(--bad);width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:14px;line-height:1;padding:0}
+  .rowdel:hover{background:#fef2f2}
+  .rowload{border:1px solid #bfdbfe;background:#fff;color:#2563eb;width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:13px;line-height:1;padding:0}
+  .rowload:hover{background:#eff6ff}
+  .rowsave{display:flex;gap:6px;justify-content:center}
+  .btn.on{background:#fbbf24;color:#78350f;border-color:#fbbf24;font-weight:700}
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
+  .modal.show{display:flex}
+  .modal-card{background:#fff;border-radius:16px;padding:22px;width:100%;max-width:390px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .modal-card h3{margin:0;font-size:16px}
+  .btn2{border:1px solid var(--line);background:#fff;color:#334155;padding:9px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-family:inherit}
+  .btn2.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .btn2:hover{filter:brightness(.97)}
+  .admin-banner{display:flex;align-items:center;gap:10px;justify-content:center;background:linear-gradient(90deg,#f59e0b,#fbbf24);color:#4a2c00;font-size:13px;font-weight:600;padding:9px 16px;border-radius:12px}
+  .admin-banner a{color:#4a2c00;text-decoration:underline;cursor:pointer}
+  .badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:999px;font-weight:650;vertical-align:middle}
+  .badge-preset{background:#e0e7ff;color:#3730a3}
+  .badge-sub{background:#fef3c7;color:#92400e}
+  /* —— 一键查询其他 Offer 弹窗 —— */
+  .modal-card.wide{max-width:900px}
+  .op-list{max-height:56vh;overflow:auto;border:1px solid var(--line);border-radius:12px}
+  .op-row{display:grid;grid-template-columns:minmax(0,1fr) 88px 118px 92px;gap:10px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+  .op-row>*{min-width:0}
+  .op-row:last-child{border-bottom:0}
+  .op-name{font-weight:650;font-size:13px}
+  .op-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .op-num{text-align:right;font-size:13px}
+  .op-num span{display:block;font-size:10.5px;color:var(--muted)}
+  .op-act{display:flex;gap:6px;justify-content:flex-end}
+  .op-act .btn2{padding:6px 10px;font-size:12px}
+  #opSearch{flex:1;min-width:170px}
+  #opCity{width:132px}
+  #opDir{width:150px}
+  /* 手机上：一键查询弹窗铺满整屏、每行纵向排布，避免出现横向拖动 */
+  @media (max-width:640px){
+    .modal{padding:0;align-items:stretch}
+    .modal-card.wide{max-width:100%;border-radius:0;height:100%;display:flex;flex-direction:column;padding:14px}
+    #opSearch{flex:1 1 100%;min-width:0}
+    #opCity,#opDir{flex:1 1 0;width:auto;min-width:0}
+    .op-list{flex:1 1 auto;min-height:80px;max-height:none}
+    .op-row{display:block;padding:10px 12px}
+    .op-num{display:inline-block;text-align:left;margin:6px 14px 0 0}
+    .op-num span{display:inline;margin-left:4px;font-size:11px}
+    .op-act{margin-top:8px;justify-content:flex-start}
+    .op-act .btn2{width:100%;padding:8px 10px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <header class="hero">
-    <!-- 头像：把 🧮 换成你喜欢的 emoji，或者换成 <img src="头像.jpg" alt=""> -->
-    <div class="avatar">🧮</div>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">¥</div>
     <div>
-      <!-- ↓↓↓ 改成你自己的名字和一句话介绍 ↓↓↓ -->
-      <h1>你的名字</h1>
-      <p>随手做的小工具，欢迎试用 · 全部免费</p>
+      <h1>IC Offer Compare</h1>
+      <p>输入offer信息一键计算到手、时薪，再也不怕逼签了。</p>
     </div>
-  </header>
-
-  <p class="section">工具箱</p>
-  <div class="grid">
-
-    <a class="card" href="salary.html">
-      <div class="icon">💰</div>
-      <h2>工资 · 个税 · 时薪 计算器<span class="tag">半导体行业</span></h2>
-      <p>填月薪和城市，算出社保、个税、每月到手和真实时薪；还能一键对比 100+ 条真实 Offer（设计 / 制造 / 设备 / EDA…）。</p>
-      <div class="go">打开 →</div>
-    </a>
-
-    <!-- 以后想加新工具：把新页面（比如 xxx.html）一起上传，然后复制上面这一整段 <a class="card">…</a> 改一下就行 -->
-
   </div>
-
-  <div class="note">
-    <b>关于你的数据：</b>所有输入和对比结果都只存在<strong>你自己的浏览器</strong>里，不会上传到任何服务器，别人也看不到。换电脑或清理浏览器数据会清空（页面上可以「导出数据」备份）。
+  <div class="topbar-actions">
+    <button class="btn" id="btnExample">载入示例</button>
+    <button class="btn" id="btnClear">清空</button>
   </div>
-
-  <footer>© <span id="year"></span> 你的名字 · 用 GitHub Pages 免费托管</footer>
+</header>
+<main class="layout">
+  <section>
+    <div class="card">
+      <h2><span class="idx">1</span>基本信息</h2>
+      <div class="body">
+        <div class="grid g3">
+          <div class="field">
+            <label>公司 / Offer</label>
+            <input id="company" list="companyList" placeholder="输入或搜索，例如：字节跳动" autocomplete="off">
+            <datalist id="companyList"></datalist>
+          </div>
+          <div class="field">
+            <label>纳税年度</label>
+            <input id="taxYear" type="number" step="1" value="2026">
+          </div>
+          <div class="field">
+            <label>工作城市 / 社保地区</label>
+            <select id="region"></select>
+          </div>
+        </div>
+        <div class="stack" id="companyMatches"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">2</span>薪资与奖金</h2>
+      <div class="body">
+        <div class="grid g4">
+          <div class="field">
+            <label>月薪（税前）<span class="unit">元/月</span></label>
+            <input id="salaryMonthly" type="number" step="100" value="40000">
+          </div>
+          <div class="field">
+            <label>发薪月数<span class="unit">个月</span></label>
+            <input id="payMonths" type="number" step="1" value="12">
+          </div>
+          <div class="field">
+            <label>年终奖<span class="unit">元/年</span></label>
+            <input id="bonusAmount" type="number" step="1000" value="100000">
+          </div>
+          <div class="field">
+            <label>专项附加扣除<span class="unit">元/月</span></label>
+            <input id="addlDeduction" type="number" step="100" value="0">
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:12px">
+          <div class="checkline" style="grid-column:1 / span 2">
+            <input type="checkbox" id="bonusSeparate" checked>
+            <label for="bonusSeparate">年终奖按「全年一次性奖金」单独计税（每人每年只能用一次）</label>
+          </div>
+          <div class="field">
+            <label>其他税前扣除<span class="unit">元/月</span></label>
+            <input id="otherDeduct" type="number" step="100" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">3</span>五险一金参数（跟随地区，可手动修改）</h2>
+      <div class="body">
+        <div class="grid g4">
+          <div class="field"><label>社保缴费基数上限<span class="unit">元/月</span></label><input id="siCap" type="number" step="100"></div>
+          <div class="field"><label>社保缴费基数下限<span class="unit">元/月</span></label><input id="siFloor" type="number" step="100"></div>
+          <div class="field"><label>公积金基数上限<span class="unit">元/月</span></label><input id="hfCap" type="number" step="100"></div>
+          <div class="field"><label>公积金基数下限<span class="unit">元/月</span></label><input id="hfFloor" type="number" step="100"></div>
+        </div>
+        <div class="grid g4" style="margin-top:12px">
+          <div class="field"><label>个人 养老 %</label><input id="r_pensionInd" type="number" step="0.1"></div>
+          <div class="field"><label>个人 医疗 %</label><input id="r_medicalInd" type="number" step="0.1"></div>
+          <div class="field"><label>个人 失业 %</label><input id="r_unempInd" type="number" step="0.1"></div>
+          <div class="field"><label>个人 其他固定额<span class="unit">元/月</span></label><input id="r_otherInd" type="number" step="1"></div>
+        </div>
+        <div class="grid g4" style="margin-top:12px">
+          <div class="field"><label>单位 养老 %</label><input id="r_pensionCorp" type="number" step="0.1"></div>
+          <div class="field"><label>单位 医疗(含生育) %</label><input id="r_medicalCorp" type="number" step="0.1"></div>
+          <div class="field"><label>单位 失业 %</label><input id="r_unempCorp" type="number" step="0.1"></div>
+          <div class="field"><label>单位 工伤 %</label><input id="r_injuryCorp" type="number" step="0.01"></div>
+        </div>
+        <div class="grid g2" style="margin-top:12px">
+          <div class="field"><label>个人 公积金 %</label><input id="r_hfInd" type="number" step="0.5"></div>
+          <div class="field"><label>单位 公积金 %</label><input id="r_hfCorp" type="number" step="0.5"></div>
+        </div>
+        <div class="hint">缴费基数 = 月薪在【下限, 上限】之间取值。<b>月薪高于上限时按上限计算，社保不再随工资增加</b>（封顶）。</div>
+        <div class="stack">
+          <span class="pill" id="pillSiBase">社保基数 —</span>
+          <span class="pill" id="pillHfBase">公积金基数 —</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">4</span>签字费（一年多笔 / 单笔）</h2>
+      <div class="body">
+        <div class="hint" style="margin:0 0 12px">
+          签字费属于「工资、薪金所得」，默认 <b>并入综合所得</b> 汇算清缴；只有公司按「全年一次性奖金」申报时才能单独计税，
+          且 <b>每人每纳税年度只能用一次</b>（与年终奖共用）。多笔签字费时，只有一笔能单独计税，其余并入综合所得。
+        </div>
+        <div class="rowlist" id="signRows"></div>
+        <div style="margin-top:11px"><button class="addbtn" id="btnAddSign">＋ 添加一笔签字费</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">5</span>股权激励（行权 / 归属）</h2>
+      <div class="body">
+        <div class="grid g3">
+          <div class="field">
+            <label>统一市场价<span class="unit">元/股，可留空</span></label>
+            <input id="unifiedMarket" type="number" step="0.01" placeholder="填写后，各行未填市场价时使用">
+          </div>
+          <div class="field" style="grid-column:2 / span 2;align-self:end">
+            <div class="hint" style="margin:0">股权激励收入 = 股数 ×（市场价 − 行权价），同一年度合并；<b>全额单独</b>适用综合所得年度税率表计税。</div>
+          </div>
+        </div>
+        <div class="rowlist" id="equityRows" style="margin-top:12px"></div>
+        <div style="margin-top:11px"><button class="addbtn" id="btnAddEquity">＋ 添加一笔股权激励</button></div>
+        <div class="scroll" style="margin-top:12px"><table id="eqTable"></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">6</span>工时、假期与成本</h2>
+      <div class="body">
+        <div class="grid g3">
+          <div class="field"><label>每天工时<span class="unit">小时</span></label><input id="hoursPerDay" type="number" step="0.5" value="9"></div>
+          <div class="field"><label>每天通勤<span class="unit">小时（往返）</span></label><input id="commuteHours" type="number" step="0.5" value="1"></div>
+          <div class="field"><label>年工作日<span class="unit">天</span></label><input id="daysPerYear" type="number" step="1" value="250"></div>
+          <div class="field"><label>年假<span class="unit">天</span></label><input id="annualLeave" type="number" step="1" value="12"></div>
+          <div class="field"><label>福利假 / 其他带薪假<span class="unit">天</span></label><input id="welfareLeave" type="number" step="1" value="0"></div>
+          <div class="field"><label>其他成本<span class="unit">元/年（租房等）</span></label><input id="otherCostYear" type="number" step="1000" value="12000"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="idx">7</span>Offer 对比</h2>
+      <div class="body">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="addbtn" id="btnAddOffer">＋ 把当前方案加入对比</button>
+          <button class="addbtn" id="btnQuery" style="border-style:solid;background:#ecfeff;color:#0e7490;border-color:#a5f3fc">🔍 一键查询其他 Offer</button>
+          <button class="addbtn" id="btnClearOffers" style="border-style:solid;background:#fff;color:#64748b;border-color:var(--line)">清空对比</button>
+        </div>
+        <div class="scroll" style="margin-top:12px"><table id="offerTable"></table></div>
+      </div>
+    </div>
+  </section>
+  <aside class="result-panel">
+    <div class="big">
+      <div class="k">年度总包到手（含公积金，不含股权）</div>
+      <div class="v" id="rTotal">—</div>
+      <div class="sub">
+        <div><div class="k">月均到手（现金流）</div><div class="v" id="rMonthlyAvg">—</div></div>
+        <div><div class="k">到手时薪</div><div class="v" id="rHourly">—</div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h2>年度汇总</h2>
+      <div class="body" style="padding-top:6px">
+        <div class="stat"><span class="lbl">税前年收入（月薪×月数）</span><span class="val" id="rGross">—</span></div>
+        <div class="stat"><span class="lbl">个人社保（年）</span><span class="val neg" id="rSi">—</span></div>
+        <div class="stat"><span class="lbl">个人公积金（年）</span><span class="val neg" id="rHf">—</span></div>
+        <div class="stat"><span class="lbl">个人所得税（年，含并入奖金）</span><span class="val neg" id="rTax">—</span></div>
+        <div class="stat"><span class="lbl">奖金单独计税</span><span class="val neg" id="rBonusTax">—</span></div>
+        <div class="stat"><span class="lbl">现金到手（年）</span><span class="val pos" id="rCash">—</span></div>
+        <div class="stat"><span class="lbl">＋ 公积金（个人+单位，年）</span><span class="val" id="rHfTotal">—</span></div>
+        <div class="stat"><span class="lbl">股权激励到手（本年度）</span><span class="val" id="rEqNet">—</span></div>
+        <div class="stat"><span class="lbl">－ 其他成本（年）</span><span class="val neg" id="rCost">—</span></div>
+        <div class="stat"><span class="lbl">净到手合计</span><span class="val pos" id="rNetTotal">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>时薪</h2>
+      <div class="body" style="padding-top:6px">
+        <div class="stat"><span class="lbl">年实际工作天数</span><span class="val" id="rWorkDays">—</span></div>
+        <div class="stat"><span class="lbl">年工作时长</span><span class="val" id="rWorkHours">—</span></div>
+        <div class="stat"><span class="lbl">到手时薪（按工作工时）</span><span class="val" id="rHourly2">—</span></div>
+        <div class="stat"><span class="lbl">真实时薪（含通勤、扣成本）</span><span class="val" id="rRealHourly">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>每月现金流（按 月薪 计算）</h2>
+      <div class="body" style="padding-top:6px">
+        <div class="scroll"><table id="monthTable"></table></div>
+        <div class="hint">按「累计预扣法」计算的每月实际到手（仅按 月薪，不含年终奖/签字费/股票）。前几个月税低、后面逐月升高属正常；奖金类在收到当月另有预扣。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>计算明细</h2>
+      <div class="body" style="padding-top:6px">
+        <div class="stat"><span class="lbl">社保缴费基数</span><span class="val" id="dSiBase">—</span></div>
+        <div class="stat"><span class="lbl">个人社保合计 / 月</span><span class="val" id="dSiInd">—</span></div>
+        <div class="stat"><span class="lbl">单位社保合计 / 月</span><span class="val" id="dSiCorp">—</span></div>
+        <div class="stat"><span class="lbl">公积金基数</span><span class="val" id="dHfBase">—</span></div>
+        <div class="stat"><span class="lbl">个人公积金 / 月</span><span class="val" id="dHfInd">—</span></div>
+        <div class="stat"><span class="lbl">单位公积金 / 月</span><span class="val" id="dHfCorp">—</span></div>
+        <div class="stat"><span class="lbl">综合所得应纳税所得额</span><span class="val" id="dTaxable">—</span></div>
+        <div class="stat"><span class="lbl">适用税率</span><span class="val" id="dRate">—</span></div>
+      </div>
+    </div>
+  </aside>
+</main>
+<footer>
+  数据与政策参考 2026 年度各地公开口径，仅供个人估算，请以当地社保公积金管理中心及税务申报为准。
+</footer>
+<div class="toast" id="toast"></div>
+<div class="modal" id="offerModal">
+  <div class="modal-card wide">
+    <h3>🔍 一键查询其他 Offer</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px">
+      <input id="opSearch" placeholder="搜索公司 / 城市 / 方向，如 思瑞浦、北京、模拟">
+      <select id="opCity"></select>
+      <select id="opDir"></select>
+    </div>
+    <div class="op-list" id="opList"></div>
+    <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap">
+      <span class="muted" id="opCount" style="font-size:12px"></span>
+      <span style="display:flex;gap:10px">
+        <button class="btn2" id="opAddAll">＋ 全部加入对比</button>
+        <button class="btn2 primary" id="opClose">关闭</button>
+      </span>
+    </div>
+  </div>
 </div>
+<script src="data/other-offers.js"></script>
+<script>
+/* 1. 税率表 */
+const ANNUAL = [
+  [36000, 0.03, 0],[144000, 0.10, 2520],[300000, 0.20, 16920],[420000, 0.25, 31920],
+  [660000, 0.30, 52920],[960000, 0.35, 85920],[Infinity, 0.45, 181920]
+];
+const MONTHLY = [
+  [3000, 0.03, 0],[12000, 0.10, 210],[25000, 0.20, 1410],[35000, 0.25, 2660],
+  [55000, 0.30, 4410],[80000, 0.35, 7160],[Infinity, 0.45, 15160]
+];
+function rateFor(x, table){
+  x = Math.max(0, x || 0);
+  for (const [limit, rate, quick] of table){ if (x <= limit) return { rate, quick }; }
+  const last = table[table.length - 1];
+  return { rate: last[1], quick: last[2] };
+}
+function comprehensiveTax(taxable){
+  taxable = Math.max(0, taxable || 0);
+  const { rate, quick } = rateFor(taxable, ANNUAL);
+  return Math.max(0, taxable * rate - quick);
+}
+function bonusSeparateTax(amount){
+  amount = Math.max(0, amount || 0);
+  if (amount <= 0) return 0;
+  const { rate, quick } = rateFor(amount / 12, MONTHLY);
+  return Math.max(0, amount * rate - quick);
+}
+/* 2. 地区数据（2026 年度，元/月，比例 %） */
+const REGIONS = {
+  "上海": { year:"2026年度", siCap:37731, siFloor:7546, hfCap:37302, hfFloor:2740,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9.5,unemp:0.5,injury:0.16},
+    hfInd:7, hfCorp:7,
+    note:"上海 2026 年度（2026.7 起）：社保基数上限 37731 / 下限 7546；公积金上限暂按 37302、下限 2740，比例 5%–7%（另有补充公积金）。" },
+  "北京": { year:"2026年度", siCap:36348, siFloor:7270, hfCap:36348, hfFloor:2540,
+    ind:{pension:8,medical:2,unemp:0.5,other:3}, corp:{pension:16,medical:9.8,unemp:0.5,injury:0.4},
+    hfInd:12, hfCorp:12,
+    note:"北京 2026 年度（2026.7 起）：社保基数上限 36348 / 下限 7270；公积金基数上限 36348，比例 5%–12%。个人另有 3 元大病互助。" },
+  "深圳": { year:"2026年度", siCap:27549, siFloor:4775, hfCap:48471, hfFloor:2520,
+    ind:{pension:8,medical:2,unemp:0.3,other:0}, corp:{pension:16,medical:5,unemp:0.7,injury:0.5},
+    hfInd:5, hfCorp:5,
+    note:"深圳 2026：养老/失业/工伤基数上限 27549 / 下限 4775（医保另有上限 33633）；公积金基数上限 48471、下限 2520，比例 5%–12%。" },
+  "广州": { year:"2026年度", siCap:27603, siFloor:5521, hfCap:41697, hfFloor:2680,
+    ind:{pension:8,medical:2,unemp:0.2,other:0}, corp:{pension:16,medical:6.5,unemp:0.8,injury:0.2},
+    hfInd:5, hfCorp:5,
+    note:"广州 2026：养老基数上限 27603 / 下限 5521；公积金基数上限 41697、下限 2680，比例 5%–12%。" },
+  "杭州": { year:"2026年度", siCap:25611, siFloor:5122, hfCap:42151, hfFloor:2490,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9.9,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"浙江 2026：全省社保基数上限 25611 / 下限 5122；杭州公积金基数上限 42151，比例 5%–12%。" },
+  "宁波": { year:"2026年度", siCap:25611, siFloor:5122, hfCap:42151, hfFloor:2660,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9.9,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"浙江 2026：全省社保基数上限 25611 / 下限 5122；公积金上限按宁波当年公布为准。" },
+  "南京": { year:"2026年度", siCap:25127, siFloor:5025, hfCap:42400, hfFloor:2660,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"江苏 2026：全省养老基数上限 25127 / 下限 5025；南京公积金上限 42400、下限 2660。" },
+  "苏州": { year:"2026年度", siCap:25127, siFloor:5025, hfCap:42400, hfFloor:2660,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"江苏 2026：全省养老基数上限 25127 / 下限 5025；公积金上限按苏州当年公布为准。" },
+  "无锡": { year:"2026年度", siCap:25127, siFloor:5025, hfCap:42400, hfFloor:2660,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"江苏 2026：全省养老基数上限 25127 / 下限 5025；公积金上限按无锡当年公布为准。" },
+  "成都": { year:"2026年度", siCap:23493, siFloor:4699, hfCap:32969, hfFloor:2330,
+    ind:{pension:8,medical:2,unemp:0.4,other:0}, corp:{pension:16,medical:8.5,unemp:0.6,injury:0.3},
+    hfInd:12, hfCorp:12, note:"四川 2026：三项社保基数上限 23493 / 下限 4699；成都公积金基数上限 32969。" },
+  "天津": { year:"2026年度", siCap:25902, siFloor:5180, hfCap:27525, hfFloor:2320,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9.5,unemp:0.5,injury:0.3},
+    hfInd:11, hfCorp:11, note:"天津 2026 年度（2026.9 起）：社保基数上限 25902 / 下限 5180；公积金上限按当年公布为准。" },
+  "重庆": { year:"2026年度", siCap:22765, siFloor:4553, hfCap:27000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"重庆 2026：社保基数上限 22765 / 下限 4553（基准值 7588.25）。" },
+  "武汉": { year:"2026年度", siCap:22761, siFloor:4552, hfCap:27000, hfFloor:2010,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"湖北 2026：社保基数上限 22761 / 下限 4552；公积金上限按当年公布为准。" },
+  "西安": { year:"2026年度", siCap:23685, siFloor:4737, hfCap:27000, hfFloor:2160,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"陕西 2026 年度（2026.1 起）：养老/失业/工伤基数上限 23685 / 下限 4737。" },
+  "厦门": { year:"2026年度", siCap:22893, siFloor:4579, hfCap:30000, hfFloor:2030,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"福建 2026：养老/失业/工伤基数上限 22893 / 下限 4579。" },
+  "福州": { year:"2026年度", siCap:22893, siFloor:4579, hfCap:30000, hfFloor:2030,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"福建 2026：养老/失业/工伤基数上限 22893 / 下限 4579。" },
+  "合肥": { year:"2026年度", siCap:21772, siFloor:4354, hfCap:26000, hfFloor:2060,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"安徽 2026：个人缴费基数上限 21772 / 下限 4354。" },
+  "青岛": { year:"2026年度", siCap:22863, siFloor:4573, hfCap:28000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"山东 2026：社保基数上限 22863 / 下限 4573。" },
+  "济南": { year:"2026年度", siCap:22863, siFloor:4573, hfCap:28000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"山东 2026：社保基数上限 22863 / 下限 4573。" },
+  "长沙": { year:"2026年度", siCap:20529, siFloor:4106, hfCap:26000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"湖南 2026：基准值 6843/月，缴费基数上限 20529 / 下限 4106。" },
+  "郑州": { year:"2026年度", siCap:19560, siFloor:3912, hfCap:25000, hfFloor:2000,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"河南 2026 年度（2026.7 起）：基数 6520/月，上限 19560 / 下限 3912。" },
+  "珠海": { year:"2026年度", siCap:27603, siFloor:5521, hfCap:30000, hfFloor:1900,
+    ind:{pension:8,medical:2,unemp:0.2,other:0}, corp:{pension:16,medical:6.5,unemp:0.8,injury:0.2},
+    hfInd:5, hfCorp:5, note:"广东 2026：养老基数上限 27603 / 下限 5521；公积金上限按珠海当年公布为准。" },
+  "佛山": { year:"2026年度", siCap:27603, siFloor:5521, hfCap:30000, hfFloor:1900,
+    ind:{pension:8,medical:2,unemp:0.2,other:0}, corp:{pension:16,medical:6.5,unemp:0.8,injury:0.2},
+    hfInd:5, hfCorp:5, note:"广东 2026：养老基数上限 27603 / 下限 5521；公积金上限按佛山当年公布为准。" },
+  "东莞": { year:"2026年度", siCap:27603, siFloor:5521, hfCap:30000, hfFloor:1900,
+    ind:{pension:8,medical:2,unemp:0.2,other:0}, corp:{pension:16,medical:6.5,unemp:0.8,injury:0.2},
+    hfInd:5, hfCorp:5, note:"广东 2026：养老基数上限 27603 / 下限 5521；公积金上限按东莞当年公布为准。" },
+  "大连": { year:"2026年度", siCap:22665, siFloor:4533, hfCap:27000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"辽宁 2026：个人缴费基数上限 22665 / 下限 4533。" },
+  "沈阳": { year:"2026年度", siCap:22665, siFloor:4533, hfCap:27000, hfFloor:2100,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:8.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"辽宁 2026：个人缴费基数上限 22665 / 下限 4533。" },
+  "自定义": { year:"", siCap:30000, siFloor:5000, hfCap:30000, hfFloor:2500,
+    ind:{pension:8,medical:2,unemp:0.5,other:0}, corp:{pension:16,medical:9.5,unemp:0.5,injury:0.3},
+    hfInd:12, hfCorp:12, note:"自定义：请手动填写本地社保/公积金基数与比例。" }
+};
+/* 半导体行业公司（可自由输入其它公司） */
+const COMPANIES = [
+  "海思半导体","华为","紫光展锐","韦尔股份","兆易创新","澜起科技","汇顶科技","圣邦股份","思瑞浦","纳芯微",
+  "艾为电子","晶晨股份","全志科技","瑞芯微","恒玄科技","乐鑫科技","中颖电子","富瀚微","北京君正","复旦微电",
+  "紫光国微","安路科技","高云半导体","京微齐力","芯原股份","寒武纪","地平线","黑芝麻智能","燧原科技","壁仞科技",
+  "沐曦","摩尔线程","天数智芯","昆仑芯","平头哥","龙芯中科","兆芯","飞腾","翱捷科技","慧智微",
+  "唯捷创芯","卓胜微","南芯半导体","杰华特","东芯股份","普冉股份","聚辰股份","格科微","思特威","芯朋微",
+  "中芯国际","华虹半导体","晶合集成","长江存储","长鑫存储","积塔半导体","粤芯半导体","台积电","联电","格罗方德",
+  "三星半导体","SK海力士","英特尔","美光","闻泰科技","士兰微","华润微","时代电气","斯达半导","新洁能",
+  "东微半导","扬杰科技","捷捷微电","燕东微","芯联集成","三安光电","天岳先进","天科合达","北方华创","中微公司",
+  "拓荆科技","盛美上海","华海清科","芯源微","长川科技","华峰测控","精测电子","上海微电子装备","屹唐半导体","中科飞测",
+  "至纯科技","新莱应材","富创精密","正帆科技","京仪装备","应用材料 AMAT","泛林 Lam Research","KLA","ASML","东京电子 TEL",
+  "尼康","佳能","沪硅产业","立昂微","中环股份","神工股份","有研新材","江丰电子","安集科技","鼎龙股份",
+  "华特气体","金宏气体","雅克科技","上海新阳","南大光电","中巨芯","格林达","华大九天","概伦电子","广立微",
+  "芯华章","国微思尔芯","合见工软","新思科技 Synopsys","楷登电子 Cadence","西门子 EDA","长电科技","通富微电","华天科技","甬矽电子",
+  "晶方科技","利扬芯片","日月光 ASE","安靠 Amkor","力成科技","英伟达 NVIDIA","AMD","高通 Qualcomm","博通 Broadcom","德州仪器 TI",
+  "英飞凌 Infineon","恩智浦 NXP","意法半导体 ST","亚德诺 ADI","安森美 onsemi","微芯 Microchip","Marvell","联发科 MediaTek","瑞昱 Realtek","联咏 Novatek",
+  "瑞萨 Renesas","索尼半导体","铠侠 Kioxia"
+];
+/* 3. 工具函数 */
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat($(id).value); return isNaN(v) ? 0 : v; };
+function fmt(n){
+  if (n === null || n === undefined || isNaN(n)) return "—";
+  const neg = n < 0; const a = Math.abs(Math.round(n * 100) / 100);
+  return (neg ? "-" : "") + "¥" + a.toLocaleString("zh-CN", { maximumFractionDigits: 2 });
+}
+function negFmt(n){ return "-" + fmt(Math.abs(n)); }
+let toastTimer = null;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+/* 4. 地区 */
+function initRegions(){
+  const sel = $("region");
+  sel.innerHTML = "";
+  Object.keys(REGIONS).forEach(name => {
+    const o = document.createElement("option"); o.value = name; o.textContent = name; sel.appendChild(o);
+  });
+  sel.value = "上海"; applyRegion("上海");
+}
+function setVal(id, v){ $(id).value = v; }
+function applyRegion(name){
+  const r = REGIONS[name] || REGIONS["自定义"];
+  setVal("siCap", r.siCap); setVal("siFloor", r.siFloor);
+  setVal("hfCap", r.hfCap); setVal("hfFloor", r.hfFloor);
+  setVal("r_pensionInd", r.ind.pension); setVal("r_medicalInd", r.ind.medical);
+  setVal("r_unempInd", r.ind.unemp); setVal("r_otherInd", r.ind.other || 0);
+  setVal("r_pensionCorp", r.corp.pension); setVal("r_medicalCorp", r.corp.medical);
+  setVal("r_unempCorp", r.corp.unemp); setVal("r_injuryCorp", r.corp.injury);
+  setVal("r_hfInd", r.hfInd); setVal("r_hfCorp", r.hfCorp);
+  const rn = $("regionNote"); if (rn) rn.innerHTML = (r.year ? "<b>" + r.year + "</b> · " : "") + (r.note || "");
+  calc();
+}
+/* 5. 动态行 */
+let signSeq = 0, eqSeq = 0;
+function addSignRow(label, amount, method){
+  signSeq++;
+  const wrap = document.createElement("div");
+  wrap.className = "rrow";
+  wrap.style.gridTemplateColumns = "1.4fr 1.2fr 1.6fr auto";
+  wrap.innerHTML =
+    '<div class="field"><label>名称</label><input class="s-label" value="' + (label || ("签字费 " + signSeq)) + '"></div>' +
+    '<div class="field"><label>金额（元）</label><input class="s-amount" type="number" step="1000" value="' + (amount || 0) + '"></div>' +
+    '<div class="field"><label>计税方式</label><select class="s-method">' +
+      '<option value="combined">并入综合所得</option>' +
+      '<option value="separate">单独计税（全年一次性奖金）</option>' +
+    '</select></div>' +
+    '<button class="iconbtn" title="删除">×</button>';
+  wrap.querySelector(".s-method").value = method || "combined";
+  wrap.querySelector(".iconbtn").onclick = () => { wrap.remove(); calc(); };
+  $("signRows").appendChild(wrap);
+  wrap.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
+}
+function addEquityRow(year, strike, market, shares){
+  eqSeq++;
+  const wrap = document.createElement("div");
+  wrap.className = "rrow";
+  wrap.style.gridTemplateColumns = "0.9fr 1fr 1fr 1fr auto";
+  wrap.innerHTML =
+    '<div class="field"><label>年度</label><input class="e-year" type="number" step="1" value="' + (year || 2026) + '"></div>' +
+    '<div class="field"><label>行权价（元/股）</label><input class="e-strike" type="number" step="0.01" value="' + (strike || 0) + '"></div>' +
+    '<div class="field"><label>市场价（元/股）</label><input class="e-market" type="number" step="0.01" value="' + (market == null ? "" : market) + '" placeholder="留空用统一价"></div>' +
+    '<div class="field"><label>股数</label><input class="e-shares" type="number" step="1" value="' + (shares || 0) + '"></div>' +
+    '<button class="iconbtn" title="删除">×</button>';
+  wrap.querySelector(".iconbtn").onclick = () => { wrap.remove(); calc(); };
+  $("equityRows").appendChild(wrap);
+  wrap.querySelectorAll("input").forEach(el => el.addEventListener("input", calc));
+}
+/* 6. 核心计算 */
+let LAST = null;
+const nv = x => { const t = parseFloat(x); return isNaN(t) ? 0 : t; };
 
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+// 从左侧表单读取全部输入（既用于计算，也用于保存快照）
+function readInputs(){
+  const rates = {};
+  ["siCap","siFloor","hfCap","hfFloor","r_pensionInd","r_medicalInd","r_unempInd","r_otherInd",
+   "r_pensionCorp","r_medicalCorp","r_unempCorp","r_injuryCorp","r_hfInd","r_hfCorp"]
+    .forEach(id => rates[id] = $(id).value);
+  return {
+    company: $("company").value, region: $("region").value, year: $("taxYear").value,
+    salaryMonthly: $("salaryMonthly").value, payMonths: $("payMonths").value,
+    bonusAmount: $("bonusAmount").value, bonusSeparate: $("bonusSeparate").checked,
+    addlDeduction: $("addlDeduction").value, otherDeduct: $("otherDeduct").value,
+    unifiedMarket: $("unifiedMarket").value,
+    hoursPerDay: $("hoursPerDay").value, commuteHours: $("commuteHours").value,
+    daysPerYear: $("daysPerYear").value, annualLeave: $("annualLeave").value,
+    welfareLeave: $("welfareLeave").value, otherCostYear: $("otherCostYear").value,
+    signRows: [...document.querySelectorAll("#signRows .rrow")].map(r => ({
+      label: r.querySelector(".s-label").value, amount: r.querySelector(".s-amount").value, method: r.querySelector(".s-method").value })),
+    equityRows: [...document.querySelectorAll("#equityRows .rrow")].map(r => ({
+      year: r.querySelector(".e-year").value, strike: r.querySelector(".e-strike").value,
+      market: r.querySelector(".e-market").value, shares: r.querySelector(".e-shares").value })),
+    rates
+  };
+}
+
+// 纯函数：给定一份输入对象，算出全部结果（预设方案、他人提交都用它复算）
+function calcAll(v){
+  v = v || {};
+  const rates = v.rates || {};
+  const rate = k => nv(rates[k]);
+  const salary = nv(v.salaryMonthly);
+  const months = Math.max(1, Math.round(nv(v.payMonths) || 12));
+  const siCap = rate("siCap"), siFloor = rate("siFloor");
+  const hfCap = rate("hfCap"), hfFloor = rate("hfFloor");
+  const siBase = Math.min(Math.max(salary, siFloor), siCap);
+  const hfBase = Math.min(Math.max(salary, hfFloor), hfCap);
+  const siBaseCapped = salary > siCap;
+  const hfBaseCapped = salary > hfCap;
+  const indRate = (rate("r_pensionInd") + rate("r_medicalInd") + rate("r_unempInd")) / 100;
+  const corpRate = (rate("r_pensionCorp") + rate("r_medicalCorp") + rate("r_unempCorp") + rate("r_injuryCorp")) / 100;
+  const siInd = siBase * indRate + rate("r_otherInd");
+  const siCorp = siBase * corpRate;
+  const hfInd = hfBase * rate("r_hfInd") / 100;
+  const hfCorp = hfBase * rate("r_hfCorp") / 100;
+  const signItems = (v.signRows || []).map(r => ({
+    label: r.label, amount: nv(r.amount), method: r.method || "combined"
+  })).filter(x => x.amount > 0);
+  const bonus = nv(v.bonusAmount);
+  const bonusSeparate = v.bonusSeparate === true || v.bonusSeparate === "true";
+  let separateUsed = bonusSeparate && bonus > 0;
+  const separateSigns = [], combinedSigns = [];
+  signItems.forEach(it => {
+    if (it.method === "separate" && !separateUsed){ separateUsed = true; separateSigns.push(it); }
+    else combinedSigns.push(it);
+  });
+  const signSeparateTotal = separateSigns.reduce((s, x) => s + x.amount, 0);
+  const signCombinedTotal = combinedSigns.reduce((s, x) => s + x.amount, 0);
+  const addl = nv(v.addlDeduction) * 12;
+  const otherDeduct = nv(v.otherDeduct) * 12;
+  const grossSalaryAnnual = salary * months;
+  const otherComprehensive = signCombinedTotal + (bonusSeparate ? 0 : bonus);
+  const grossAnnual = grossSalaryAnnual + otherComprehensive;
+  const specialDeduct = (siInd + hfInd) * months;
+  const taxable = Math.max(0, grossAnnual - specialDeduct - 60000 - addl - otherDeduct);
+  const { rate: compRate } = rateFor(taxable, ANNUAL);
+  const compTax = comprehensiveTax(taxable);
+  const bonusTax = bonusSeparate ? bonusSeparateTax(bonus) : 0;
+  const signSepTax = signSeparateTotal > 0 ? bonusSeparateTax(signSeparateTotal) : 0;
+  const schedule = [];
+  let cumInc = 0, cumDed = 0, cumTax = 0;
+  for (let m = 1; m <= months; m++){
+    cumInc += salary;
+    cumDed += siInd + hfInd + 5000 + nv(v.addlDeduction) + nv(v.otherDeduct);
+    const cumDue = comprehensiveTax(Math.max(0, cumInc - cumDed));
+    const mTax = Math.max(0, cumDue - cumTax); cumTax = cumDue;
+    schedule.push({ m, income: salary, si: siInd, hf: hfInd, tax: mTax, net: salary - siInd - hfInd - mTax });
+  }
+  const monthlyAvg = schedule.length ? schedule.reduce((s, r) => s + r.net, 0) / schedule.length : 0;
+  const separateTotal = (bonusSeparate ? bonus : 0) + signSeparateTotal;
+  const separateTaxAll = bonusTax + signSepTax;
+  const cashNet = grossAnnual - specialDeduct - compTax + (separateTotal - separateTaxAll);
+  const hfTotalAnnual = (hfInd + hfCorp) * months;
+  const totalNoEquity = cashNet + hfTotalAnnual;
+  const unified = nv(v.unifiedMarket);
+  const eqRows = (v.equityRows || []).map(r => {
+    const year = Math.round(nv(r.year));
+    const strike = nv(r.strike);
+    let market = parseFloat(r.market);
+    if (isNaN(market)) market = unified;
+    const shares = nv(r.shares);
+    const income = Math.max(0, shares * (market - strike));
+    return { year, strike, market, shares, income };
+  }).filter(x => x.shares > 0 && x.market > 0);
+  const byYear = {};
+  eqRows.forEach(r => { byYear[r.year] = (byYear[r.year] || 0) + r.income; });
+  const eqDetail = Object.keys(byYear).sort().map(y => {
+    const income = byYear[y]; const tax = comprehensiveTax(income);
+    return { year: y, income, tax, net: income - tax };
+  });
+  const eqNetAll = eqDetail.reduce((s, x) => s + x.net, 0);
+  const curYear = Math.round(nv(v.year));
+  const eqNetThisYear = eqDetail.filter(x => String(x.year) === String(curYear)).reduce((s, x) => s + x.net, 0);
+  const hoursPerDay = nv(v.hoursPerDay);
+  const commute = nv(v.commuteHours);
+  const workDays = Math.max(0, nv(v.daysPerYear) - nv(v.annualLeave) - nv(v.welfareLeave));
+  const workHours = workDays * hoursPerDay;
+  const realHours = workDays * (hoursPerDay + commute);
+  const totalWithEquityThisYear = totalNoEquity + eqNetThisYear;
+  const cost = nv(v.otherCostYear);
+  const netAfterCost = totalWithEquityThisYear - cost;
+  // 工时未知（例如从「一键查询其他 Offer」载入的记录）时不计算时薪，界面显示 —
+  const hoursKnown = hoursPerDay > 0 && nv(v.daysPerYear) > 0;
+  const hourly = hoursKnown ? totalWithEquityThisYear / workHours : null;
+  const realHourly = hoursKnown ? netAfterCost / realHours : null;
+  return { salary, months, siBase, hfBase, siBaseCapped, hfBaseCapped, siInd, siCorp, hfInd, hfCorp,
+    schedule, monthlyAvg, grossSalaryAnnual, grossAnnual, specialDeduct, addl, otherDeduct, taxable, compRate, compTax,
+    bonus, bonusSeparate, bonusTax, signItems, separateSigns, combinedSigns, signSeparateTotal, signSepTax, signCombinedTotal,
+    cashNet, hfTotalAnnual, totalNoEquity, eqRows, eqDetail, eqNetAll, eqNetThisYear, curYear,
+    hoursKnown, hoursPerDay, commute, workDays, workHours, realHours, totalWithEquityThisYear, cost, netAfterCost, hourly, realHourly };
+}
+function compute(){ return calcAll(readInputs()); }
+/* 7. 渲染 */
+function calc(){
+  const R = compute(); LAST = R;
+  $("pillSiBase").textContent = "社保基数 " + fmt(R.siBase) + (R.siBaseCapped ? "（已封顶）" : (R.salary < num("siFloor") ? "（按下限）" : ""));
+  $("pillHfBase").textContent = "公积金基数 " + fmt(R.hfBase) + (R.hfBaseCapped ? "（已封顶）" : "");
+  $("rTotal").textContent = fmt(R.totalNoEquity);
+  $("rMonthlyAvg").textContent = fmt(R.monthlyAvg);
+  $("rHourly").textContent = fmt(R.hourly);
+  $("rGross").textContent = fmt(R.grossSalaryAnnual);
+  $("rSi").textContent = negFmt(R.siInd * R.months);
+  $("rHf").textContent = negFmt(R.hfInd * R.months);
+  $("rTax").textContent = negFmt(R.compTax);
+  $("rBonusTax").textContent = negFmt(R.bonusTax + R.signSepTax);
+  $("rCash").textContent = fmt(R.cashNet);
+  $("rHfTotal").textContent = fmt(R.hfTotalAnnual);
+  $("rEqNet").textContent = fmt(R.eqNetThisYear);
+  $("rCost").textContent = negFmt(R.cost);
+  $("rNetTotal").textContent = fmt(R.netAfterCost);
+  $("rWorkDays").textContent = R.hoursKnown ? R.workDays + " 天" : "未填写";
+  $("rWorkHours").textContent = R.hoursKnown ? Math.round(R.workHours).toLocaleString("zh-CN") + " 小时" : "未填写";
+  $("rHourly2").textContent = fmt(R.hourly);
+  $("rRealHourly").textContent = fmt(R.realHourly);
+  $("dSiBase").textContent = fmt(R.siBase) + (R.siBaseCapped ? " · 已封顶" : "");
+  $("dSiInd").textContent = fmt(R.siInd);
+  $("dSiCorp").textContent = fmt(R.siCorp);
+  $("dHfBase").textContent = fmt(R.hfBase) + (R.hfBaseCapped ? " · 已封顶" : "");
+  $("dHfInd").textContent = fmt(R.hfInd);
+  $("dHfCorp").textContent = fmt(R.hfCorp);
+  $("dTaxable").textContent = fmt(R.taxable);
+  $("dRate").textContent = (R.compRate * 100).toFixed(0) + "%";
+  let mt = '<thead><tr><th>月份</th><th>税前</th><th>社保</th><th>公积金</th><th>个税</th><th>到手</th></tr></thead><tbody>';
+  R.schedule.forEach(r => {
+    mt += '<tr><td>' + r.m + ' 月</td><td class="num">' + fmt(r.income) + '</td><td class="num">' + fmt(r.si) +
+      '</td><td class="num">' + fmt(r.hf) + '</td><td class="num">' + fmt(r.tax) + '</td><td class="num"><b>' + fmt(r.net) + '</b></td></tr>';
+  });
+  $("monthTable").innerHTML = mt + '</tbody>';
+  let et = '<thead><tr><th>年度</th><th>股权收入</th><th>个税(单独)</th><th>到手</th></tr></thead><tbody>';
+  if (R.eqDetail.length === 0){
+    et += '<tr><td colspan="4" class="muted" style="text-align:center;padding:14px">暂无股权激励数据</td></tr>';
+  } else {
+    R.eqDetail.forEach(x => {
+      et += '<tr><td>' + x.year + ' 年</td><td class="num">' + fmt(x.income) + '</td><td class="num">' + fmt(x.tax) + '</td><td class="num"><b>' + fmt(x.net) + '</b></td></tr>';
+    });
+    et += '<tr><td><b>合计</b></td><td class="num">—</td><td class="num">—</td><td class="num"><b>' + fmt(R.eqNetAll) + '</b></td></tr>';
+  }
+  $("eqTable").innerHTML = et + '</tbody>';
+  const warnCount = R.signItems.filter(x => x.method === "separate").length + ($("bonusSeparate").checked && R.bonus > 0 ? 1 : 0);
+  if (warnCount > 1 && !window.__warned){
+    window.__warned = true;
+    toast("提示：全年一次性奖金单独计税每年只能用一次，已自动只保留一笔单独计税。");
+    setTimeout(() => window.__warned = false, 4000);
+  }
+}
+/* 8. Offer 对比 + 服务端 / 测试模式 */
+// 连上 server.js 就是 server 模式（多人共用、可收集数据）；直接双击打开则是 local 单机模式
+const SERVER = { mode: "local", admin: false, password: "", presets: [], submissions: [] };
+async function api(path, body){
+  try {
+    const res = await fetch(path, {
+      method: body === undefined ? "GET" : "POST",
+      headers: body === undefined ? {} : { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    });
+    return await res.json();
+  } catch (e){ return null; }
+}
+async function loadServerLists(){
+  if (SERVER.admin){
+    const a = await api("/api/admin/offers", { password: SERVER.password });
+    if (a && a.ok){ SERVER.presets = a.presets || []; SERVER.submissions = a.submissions || []; return; }
+    SERVER.admin = false; SERVER.password = ""; SERVER.submissions = [];
+    toast((a && a.error) || "管理员会话已失效，请重新进入测试模式");
+  }
+  const r = await api("/api/preset");
+  SERVER.presets = (r && r.ok && r.offers) ? r.offers : [];
+  SERVER.submissions = [];
+}
+async function detectServer(){
+  if (location.protocol === "file:"){ SERVER.mode = "local"; return false; }
+  const r = await api("/api/ping");
+  if (r && r.ok && r.mode === "server"){ SERVER.mode = "server"; await loadServerLists(); return true; }
+  SERVER.mode = "local"; return false;
+}
+/* 本地数据库：优先 IndexedDB，不可用（如个别 file:// 限制）时回退 localStorage */
+const DB_NAME = "salary_tool", DB_STORE = "offers", LS_KEY = "salary_tool_offers_v1";
+const Store = (() => {
+  let db = null, mode = "none", ready = null;
+  function init(){
+    if (ready) return ready;
+    ready = new Promise(resolve => {
+      if (!window.indexedDB){ mode = "localStorage"; return resolve(); }
+      let req, done = false;
+      const fallback = () => { if (!done){ done = true; mode = "localStorage"; resolve(); } };
+      try { req = indexedDB.open(DB_NAME, 1); } catch (e){ return fallback(); }
+      req.onupgradeneeded = () => { const d = req.result; if (!d.objectStoreNames.contains(DB_STORE)) d.createObjectStore(DB_STORE, { keyPath: "id" }); };
+      req.onsuccess = () => { if (done) return; done = true; db = req.result; mode = "indexedDB"; resolve(); };
+      req.onerror = fallback; req.onblocked = fallback;
+      setTimeout(fallback, 2500);
+    });
+    return ready;
+  }
+  const lsAll = () => { try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch (e){ return []; } };
+  const lsSet = a => { try { localStorage.setItem(LS_KEY, JSON.stringify(a)); } catch (e){} };
+  return {
+    mode: () => mode,
+    async all(){
+      await init();
+      if (mode === "indexedDB"){
+        return new Promise(res => {
+          let r; try { r = db.transaction(DB_STORE, "readonly").objectStore(DB_STORE).getAll(); } catch (e){ return res(lsAll()); }
+          r.onsuccess = () => res(r.result || []); r.onerror = () => res(lsAll());
+        });
+      }
+      return lsAll();
+    },
+    async save(list){
+      await init();
+      if (mode === "indexedDB"){
+        return new Promise(res => {
+          let tx; try { tx = db.transaction(DB_STORE, "readwrite"); } catch (e){ lsSet(list); return res(); }
+          const os = tx.objectStore(DB_STORE);
+          os.clear(); list.forEach(o => os.put(o));
+          tx.oncomplete = () => res();
+          tx.onerror = () => { lsSet(list); res(); };
+          tx.onabort = () => { lsSet(list); res(); };
+        });
+      }
+      lsSet(list);
+    }
+  };
+})();
+
+let OFFERS = [];
+
+function currentOffer(){
+  const R = LAST || compute();
+  return {
+    id: "o" + Date.now() + String(Math.floor(Math.random() * 1000)).padStart(3, "0"),
+    savedAt: new Date().toLocaleString("zh-CN", { hour12: false }),
+    company: $("company").value || "未命名", region: $("region").value, year: $("taxYear").value,
+    salary: R.salary, bonus: R.bonus, cashNet: R.cashNet, hfTotal: R.hfTotalAnnual, eqNet: R.eqNetThisYear,
+    total: R.totalWithEquityThisYear, net: R.netAfterCost, hourly: R.hourly, realHourly: R.realHourly,
+    inputs: readInputs()
+  };
+}
+async function persist(){ try { await Store.save(OFFERS); } catch (e){} updateStatus(); }
+function updateStatus(){
+  const el = $("offerStatus"); if (!el) return;
+  if (SERVER.mode === "server"){
+    if (SERVER.admin){
+      el.innerHTML = "🛠 <b>测试模式（管理员）</b>：共 <b>" + SERVER.presets.length + "</b> 条参考方案 + <b>" +
+        SERVER.submissions.length + "</b> 条用户提交（仅你可见）。🛠 再点一次右上角按钮可退出。";
+    } else {
+      el.innerHTML = "当前显示 <b>" + SERVER.presets.length + "</b> 条参考方案。你填写的方案点「提交给管理员」后只进入管理员数据库，" +
+        "其他人和你自己都看不到（这是有意设计的）。";
+    }
+    return;
+  }
+  const where = Store.mode() === "indexedDB" ? "本机数据库 IndexedDB" : "本机存储 localStorage";
+  el.innerHTML = OFFERS.length
+    ? "（单机模式）已保存 <b>" + OFFERS.length + "</b> 条方案到 " + where + "。↺ 载入 / × 删除；建议「导出数据」备份。" +
+      " 想收集他人数据 / 用测试模式，请先双击「启动服务.bat」。"
+    : "（单机模式）暂无已存方案。点「把当前方案加入对比」会保存到 " + where + "。想收集他人数据 / 用测试模式，请先双击「启动服务.bat」。";
+}
+
+function offerSummary(rec){
+  const R = (rec && rec.inputs) ? calcAll(rec.inputs) : null;
+  const inp = (rec && rec.inputs) || {};
+  if (!R) return { company: (rec && rec.company) || "未命名", region: (rec && rec.region) || "",
+    salary: 0, bonus: 0, cashNet: 0, total: 0, net: 0, hourly: 0, realHourly: 0 };
+  return { company: rec.company || inp.company || "未命名", region: inp.region || rec.region || "",
+    salary: R.salary, bonus: R.bonus, cashNet: R.cashNet, eqNet: R.eqNetThisYear,
+    total: R.totalWithEquityThisYear, net: R.netAfterCost, hourly: R.hourly, realHourly: R.realHourly };
+}
+function viewRows(){
+  if (SERVER.mode === "server"){
+    const rows = SERVER.presets.map(o => ({ rec: o, src: "preset" }));
+    if (SERVER.admin) SERVER.submissions.forEach(o => rows.push({ rec: o, src: "submission" }));
+    OFFERS.forEach(o => rows.push({ rec: o, src: "local" }));   // 一键查询里手动加入的，也显示出来
+    return rows;
+  }
+  return OFFERS.map(o => ({ rec: o, src: "local" }));
+}
+function renderOffers(){
+  const rows = viewRows();
+  let t = '<thead><tr><th>公司</th><th>城市</th><th>月薪</th><th>年终</th><th>现金到手(年)</th><th>总到手(含公积金)</th><th>净到手(含股权)</th><th>时薪</th><th>真实时薪</th><th class="del-col">操作</th></tr></thead><tbody>';
+  if (!rows.length){
+    t += '<tr><td colspan="10" class="muted" style="text-align:center;padding:14px">' +
+      (SERVER.mode === "server"
+        ? (SERVER.admin ? "暂无数据：还没有用户提交，data/preset.json 里也没有参考方案。" : "暂无参考方案（管理员可在 data/preset.json 里添加）。")
+        : "还没有对比方案。填好左边信息后点「把当前方案加入对比」。") + '</td></tr>';
+  } else {
+    rows.forEach((row, i) => {
+      const o = row.rec, s = offerSummary(o);
+      let badge = "", when = "";
+      if (row.src === "preset") badge = '<span class="badge badge-preset">参考方案</span>';
+      else if (row.src === "submission"){
+        badge = '<span class="badge badge-sub">用户提交</span>';
+        const ts = o.createdAt ? new Date(o.createdAt).toLocaleString("zh-CN", { hour12: false }) : "";
+        when = '<div class="muted" style="font-size:11px">' + ts + (o.ip ? " · " + o.ip : "") + '</div>';
+      } else if (o.savedAt) when = '<div class="muted" style="font-size:11px">' + o.savedAt + '</div>';
+      t += '<tr><td>' + s.company + ' <span class="muted">#' + (i + 1) + '</span> ' + badge + when + '</td><td>' + s.region + '</td>' +
+        '<td class="num">' + fmt(s.salary) + '</td><td class="num">' + fmt(s.bonus) + '</td>' +
+        '<td class="num">' + fmt(s.cashNet) + '</td><td class="num">' + fmt(s.total) + '</td>' +
+        '<td class="num"><b>' + fmt(s.net) + '</b></td><td class="num">' + fmt(s.hourly) + '</td>' +
+        '<td class="num">' + fmt(s.realHourly) + '</td>' +
+        '<td class="del-col"><div class="rowsave">' +
+          '<button class="rowload" data-i="' + i + '" title="载入到表单">↺</button>' +
+          (row.src === "preset" ? "" : '<button class="rowdel" data-i="' + i + '" title="删除这一行">×</button>') +
+        '</div></td></tr>';
+    });
+  }
+  $("offerTable").innerHTML = t + '</tbody>';
+  $("offerTable").querySelectorAll(".rowdel").forEach(btn => {
+    btn.onclick = async () => {
+      const row = rows[parseInt(btn.getAttribute("data-i"), 10)];
+      if (!row) return;
+      if (row.src === "local"){
+        const idx = OFFERS.indexOf(row.rec);
+        if (idx >= 0) OFFERS.splice(idx, 1);
+        renderOffers(); await persist(); toast("已删除对比方案");
+      } else if (row.src === "submission"){
+        const r = await api("/api/admin/delete", { password: SERVER.password, id: row.rec.id });
+        if (r && r.ok){ await loadServerLists(); renderOffers(); updateStatus(); toast("已删除该用户提交"); }
+        else toast((r && r.error) || "删除失败");
+      }
+    };
+  });
+  $("offerTable").querySelectorAll(".rowload").forEach(btn => {
+    btn.onclick = () => { const row = rows[parseInt(btn.getAttribute("data-i"), 10)]; if (row) restoreOffer(row.rec); };
+  });
+}
+async function saveOffer(){
+  const rec = currentOffer();
+  if (SERVER.mode === "server"){
+    if (SERVER.admin){ rec.id = "s" + Date.now() + String(Math.floor(Math.random() * 1000)).padStart(3, "0"); }
+    const r = await api("/api/submit", { offer: rec });
+    if (r && r.ok){
+      if (SERVER.admin){
+        await loadServerLists(); renderOffers(); updateStatus();
+        toast("已保存到数据库（管理员可见）");
+      } else {
+        toast("已提交给管理员（仅管理员可见）");
+      }
+    } else {
+      toast("提交失败：" + ((r && r.error) || "请确认服务在运行"));
+    }
+    return;
+  }
+  OFFERS.push(rec);
+  renderOffers();
+  await persist();
+  toast("已加入对比并保存：" + ($("company").value || "未命名"));
+}
+// 把一条已保存方案还原到左侧表单
+function restoreOffer(rec){
+  if (!rec) return;
+  const inp = rec.inputs;
+  if (!inp){ toast("该记录是旧版本，只保留结果，无法载入表单"); return; }
+  $("company").value = inp.company || ""; $("companyMatches").innerHTML = "";
+  if (REGIONS[inp.region]) $("region").value = inp.region;
+  $("taxYear").value = inp.year || 2026;
+  setVal("salaryMonthly", inp.salaryMonthly); setVal("payMonths", inp.payMonths);
+  setVal("bonusAmount", inp.bonusAmount); $("bonusSeparate").checked = !!inp.bonusSeparate;
+  setVal("addlDeduction", inp.addlDeduction); setVal("otherDeduct", inp.otherDeduct);
+  setVal("unifiedMarket", inp.unifiedMarket);
+  setVal("hoursPerDay", inp.hoursPerDay); setVal("commuteHours", inp.commuteHours);
+  setVal("daysPerYear", inp.daysPerYear); setVal("annualLeave", inp.annualLeave);
+  setVal("welfareLeave", inp.welfareLeave); setVal("otherCostYear", inp.otherCostYear);
+  $("signRows").innerHTML = ""; signSeq = 0;
+  (inp.signRows && inp.signRows.length ? inp.signRows : [{ label:"入职签字费", amount:0, method:"combined" }])
+    .forEach(s => addSignRow(s.label, s.amount, s.method));
+  $("equityRows").innerHTML = ""; eqSeq = 0;
+  (inp.equityRows && inp.equityRows.length ? inp.equityRows : [{ year: inp.year || 2026, strike:0, market:"", shares:0 }])
+    .forEach(e => addEquityRow(e.year, e.strike, e.market, e.shares));
+  Object.keys(inp.rates || {}).forEach(k => { if ($(k)) $(k).value = inp.rates[k]; });
+  const reg = REGIONS[inp.region];
+  const rn = $("regionNote");
+  if (rn) rn.innerHTML = reg ? ((reg.year ? "<b>" + reg.year + "</b> · " : "") + (reg.note || "")) : "";
+  calc();
+  toast("已载入：" + (rec.company || "") + (rec.savedAt ? "（" + rec.savedAt + "）" : ""));
+}
+/* 9. 公司搜索 */
+function fuzzy(q, list){
+  q = q.trim().toLowerCase(); if (!q) return [];
+  const score = s => {
+    const t = s.toLowerCase();
+    if (t === q) return 100; if (t.startsWith(q)) return 80; if (t.includes(q)) return 60;
+    let i = 0; for (const ch of t){ if (ch === q[i]) i++; if (i === q.length) return 30; }
+    return 0;
+  };
+  return list.map(s => ({ s, k: score(s) })).filter(x => x.k > 0).sort((a, b) => b.k - a.k).slice(0, 6).map(x => x.s);
+}
+function bindCompany(){
+  $("companyList").innerHTML = COMPANIES.map(c => '<option value="' + c + '">').join("");
+  $("company").addEventListener("input", () => {
+    const m = fuzzy($("company").value, COMPANIES);
+    const box = $("companyMatches");
+    if (!m.length){ box.innerHTML = ""; return; }
+    box.innerHTML = m.map(c => '<span class="pill" style="cursor:pointer" data-c="' + c + '">🔎 ' + c + '</span>').join("");
+    box.querySelectorAll("[data-c]").forEach(el => el.onclick = () => { $("company").value = el.getAttribute("data-c"); box.innerHTML = ""; });
+  });
+}
+/* 9.5 一键查询其他 Offer
+   数据文件：data/other-offers.js（由《27届薪资统计表 · IC芯启航》整理生成）
+   每条记录与工具里保存的 offer 结构完全一致（inputs + 展示用 meta），所以能直接载入表单 / 加入对比。
+   原表没有工时数据，这些记录 hoursUnknown=true、工时字段为 0 → 时薪显示 —，不参与计算。 */
+const OTHER_OFFERS = (typeof window !== "undefined" && Array.isArray(window.OTHER_OFFERS)) ? window.OTHER_OFFERS : [];
+// 只保留下面这些公司的 offer，其余不显示（搜索、筛选也都在这批里找）
+const PICKER_COMPANIES = ["长鑫","芯联","芯朋微","思特威","思瑞浦","纳芯微","圣邦微","格科微","峰岹","艾为","力芯微"];
+function opPool(){
+  return OTHER_OFFERS.filter(rec => PICKER_COMPANIES.indexOf(rec.company) >= 0);
+}
+function opFiltered(){
+  const q = ($("opSearch").value || "").trim().toLowerCase();
+  const city = $("opCity").value, dir = $("opDir").value;
+  return opPool().filter(rec => {
+    const m = rec.meta || {};
+    if (city && rec.region !== city) return false;
+    if (dir && String(m.dir || "") !== dir) return false;
+    if (!q) return true;
+    return [rec.company, m.raw, rec.region, m.dir, m.site, m.rant, m.cmt]
+      .join(" ").toLowerCase().indexOf(q) >= 0;
+  });
+}
+// 总包：只保留「多少万」
+function opWan(v){
+  const s = String(v == null ? "" : v).trim();
+  if (!s) return "—";
+  const mm = s.match(/(\d+(?:\.\d+)?)/);
+  if (!mm) return s;
+  return (Math.round(parseFloat(mm[1]) * 100) / 100) + "万";
+}
+// 月base×月：把 * x ＊ × 统一成 ×
+function opBase(v){
+  const s = String(v == null ? "" : v).trim();
+  return s ? s.replace(/[*＊xXｘ×]/g, "×") : "—";
+}
+function renderOfferPicker(){
+  const list = opFiltered();
+  const pool = opPool().length;
+  $("opCount").textContent = (list.length === pool) ? ("共 " + pool + " 条") : ("匹配 " + list.length + " / " + pool + " 条");
+  if (!list.length){
+    $("opList").innerHTML = '<div class="muted" style="padding:20px;text-align:center">没有匹配的 Offer，换个关键词试试</div>';
+    return;
+  }
+  let html = list.map((rec, i) => {
+    const m = rec.meta || {};
+    const sub = [m.dir, rec.region].filter(Boolean).join(" · ");
+    return '<div class="op-row" data-i="' + i + '">' +
+        '<div><div class="op-name">' + rec.company + '</div><div class="op-sub">' + sub + '</div></div>' +
+        '<div class="op-num"><b>' + opWan(m.pkg) + '</b><span>总包</span></div>' +
+        '<div class="op-num"><b>' + opBase(m.base) + '</b><span>月base×月</span></div>' +
+        '<div class="op-act"><button class="btn2" data-add="' + i + '">＋对比</button></div>' +
+      '</div>';
+  }).join("");
+  $("opList").innerHTML = html;
+  $("opList").querySelectorAll("[data-add]").forEach(b => b.onclick = e => { e.stopPropagation(); addOtherOffer(list[+b.getAttribute("data-add")]); });
+}
+function closeOfferPicker(){ $("offerModal").classList.remove("show"); }
+function copyOfferRecord(rec, seq){
+  const c = JSON.parse(JSON.stringify(rec));
+  c.id = "q" + Date.now() + "-" + seq;
+  c.savedAt = "数据库载入";
+  return c;
+}
+async function addOtherOffer(rec){
+  if (!rec) return;
+  OFFERS.push(copyOfferRecord(rec, OFFERS.length));
+  renderOffers(); await persist();
+  toast("已加入对比：" + rec.company);
+}
+function openOfferPicker(){
+  if (!opPool().length){ toast("其他 Offer 数据未载入（缺少 data/other-offers.js）"); return; }
+  const citySel = $("opCity"), dirSel = $("opDir"), box = $("offerModal");
+  if (!citySel.dataset.ready){
+    const cities = [], dirs = [];
+    opPool().forEach(r => { if (cities.indexOf(r.region) < 0) cities.push(r.region); });
+    opPool().forEach(r => { const d = (r.meta || {}).dir; if (d && dirs.indexOf(d) < 0) dirs.push(d); });
+    cities.sort(); dirs.sort();
+    citySel.innerHTML = '<option value="">全部城市</option>' + cities.map(c => '<option value="' + c + '">' + c + '</option>').join("");
+    dirSel.innerHTML = '<option value="">全部方向</option>' + dirs.map(c => '<option value="' + c + '">' + c + '</option>').join("");
+    $("opSearch").addEventListener("input", renderOfferPicker);
+    citySel.addEventListener("change", renderOfferPicker);
+    dirSel.addEventListener("change", renderOfferPicker);
+    $("opClose").onclick = closeOfferPicker;
+    $("opAddAll").onclick = async () => {
+      const list = opFiltered();
+      if (!list.length) return;
+      list.forEach((rec, i) => OFFERS.push(copyOfferRecord(rec, OFFERS.length + i)));
+      renderOffers(); await persist(); closeOfferPicker();
+      toast("已加入 " + list.length + " 条 Offer 到对比表");
+    };
+    box.addEventListener("click", e => { if (e.target === box) closeOfferPicker(); });
+    citySel.dataset.ready = "1";
+  }
+  box.classList.add("show");
+  renderOfferPicker();
+}
+/* 10. 初始化 */
+function bindInputs(){
+  document.querySelectorAll("input,select").forEach(el => {
+    if (el.closest("#signRows") || el.closest("#equityRows") || el.closest("#offerModal") || el.closest("#adminModal")) return;
+    el.addEventListener("input", calc); el.addEventListener("change", calc);
+  });
+}
+function loadExample(){
+  $("company").value = "示例 · 上海某公司"; $("companyMatches").innerHTML = ""; $("taxYear").value = 2026;
+  $("region").value = "上海"; applyRegion("上海");
+  setVal("salaryMonthly", 53000); setVal("payMonths", 12);
+  setVal("bonusAmount", 180000); $("bonusSeparate").checked = true;
+  setVal("addlDeduction", 2000); setVal("otherDeduct", 0);
+  $("signRows").innerHTML = ""; signSeq = 0; addSignRow("入职签字费", 100000, "combined");
+  $("equityRows").innerHTML = ""; eqSeq = 0; setVal("unifiedMarket", 118);
+  addEquityRow(2026, 50.5, "", 2028); addEquityRow(2026, 55.5, "", 2860);
+  setVal("hoursPerDay", 9); setVal("commuteHours", 1); setVal("daysPerYear", 248);
+  setVal("annualLeave", 12); setVal("welfareLeave", 0); setVal("otherCostYear", 12000);
+  calc(); toast("已载入示例数据");
+}
+function clearAll(){
+  $("company").value = ""; $("companyMatches").innerHTML = ""; $("taxYear").value = 2026;
+  setVal("salaryMonthly", 0); setVal("payMonths", 12); setVal("bonusAmount", 0);
+  setVal("addlDeduction", 0); setVal("otherDeduct", 0);
+  $("signRows").innerHTML = ""; signSeq = 0; $("equityRows").innerHTML = ""; eqSeq = 0; setVal("unifiedMarket", "");
+  setVal("hoursPerDay", 9); setVal("commuteHours", 1); setVal("daysPerYear", 250);
+  setVal("annualLeave", 12); setVal("welfareLeave", 0); setVal("otherCostYear", 0);
+  calc();
+}
+async function init(){
+  initRegions();
+  bindInputs();
+  bindCompany();
+  $("region").addEventListener("change", e => applyRegion(e.target.value));
+  $("btnAddSign").onclick = () => addSignRow();
+  $("btnAddEquity").onclick = () => addEquityRow();
+  $("btnExample").onclick = loadExample;
+  $("btnClear").onclick = clearAll;
+  $("btnAddOffer").onclick = saveOffer;
+  $("btnClearOffers").onclick = async () => { OFFERS = []; renderOffers(); await persist(); toast("已清空对比"); };
+  $("btnQuery").onclick = openOfferPicker;
+  addSignRow("入职签字费", 0, "combined");
+  addEquityRow(2026, 0, "", 0);
+  // 本机保存的对比方案（含「一键查询其他 Offer」里加入的），联机模式也一并载入
+  try { OFFERS = (await Store.all()) || []; } catch (e){ OFFERS = []; }
+  // 连上 server.js 就是联机模式（对比表显示 data/preset.json 里的参考方案），否则纯本机
+  await detectServer();
+  renderOffers();
+  updateStatus();
+  calc();
+}
+document.addEventListener("DOMContentLoaded", () => { init().catch(err => console.error(err)); });
+</script>
 </body>
 </html>
